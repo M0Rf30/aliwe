@@ -1,0 +1,4 @@
+ 
+[How to Build]
+Type ./buildscript.sh
+and copy contents under <build> folder in your root
