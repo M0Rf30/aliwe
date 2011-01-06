@@ -7,14 +7,13 @@ ProjectName            :=aliwe
 ConfigurationName      :=Release
 IntermediateDirectory  :=./Release
 OutDir                 := $(IntermediateDirectory)
-WorkspacePath          := "/home/morfeo/aliwe"
-ProjectPath            := "/home/morfeo/aliwe"
+WorkspacePath          := .
+ProjectPath            := .
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=M0Rf30
 Date                   :=06/01/2011
-CodeLitePath           :="/home/morfeo/.codelite"
 LinkerName             :=gcc
 ArchiveTool            :=ar rcus
 SharedObjectLinkerName :=gcc -shared -fPIC
@@ -48,7 +47,7 @@ LibPath                := "$(LibraryPathSwitch)/usr/lib"
 ##
 ## User defined environment variables
 ##
-CodeLiteDir:=/usr/share/codelite
+
 Objects=$(IntermediateDirectory)/aliwe$(ObjectSuffix) 
 
 ##
@@ -70,12 +69,12 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/aliwe$(ObjectSuffix): aliwe.c $(IntermediateDirectory)/aliwe$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "/home/morfeo/aliwe/aliwe.c" $(C_CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/aliwe$(ObjectSuffix) $(IncludePath)
+	$(C_CompilerName) $(SourceSwitch) "aliwe.c" $(C_CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/aliwe$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/aliwe$(DependSuffix): aliwe.c
-	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/aliwe$(ObjectSuffix) -MF$(IntermediateDirectory)/aliwe$(DependSuffix) -MM "/home/morfeo/aliwe/aliwe.c"
+	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/aliwe$(ObjectSuffix) -MF$(IntermediateDirectory)/aliwe$(DependSuffix) -MM "aliwe.c"
 
 $(IntermediateDirectory)/aliwe$(PreprocessSuffix): aliwe.c
-	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/aliwe$(PreprocessSuffix) "/home/morfeo/aliwe/aliwe.c"
+	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/aliwe$(PreprocessSuffix) "aliwe.c"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
