@@ -300,7 +300,7 @@ int searchngen(magic vect[MAX], int riemp,long int th)
 						}
 
 				}
-			printf("\n\n\tEthernet complete MAC:");
+			printf("\n\n\tComplete Ethernet MAC:");
 			printf("\n\t%s",cmpmac);
 		}
 
