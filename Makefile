@@ -1,12 +1,7 @@
-##
-## Auto Generated makefile by CodeLite IDE
-## any manual changes will be erased      
-##
+
 ## Release
 ProjectName            :=aliwe
 ConfigurationName      :=Release
-IntermediateDirectory  :=./Release
-OutDir                 := $(IntermediateDirectory)
 WorkspacePath          := .
 ProjectPath            := .
 CurrentFileName        :=
@@ -29,7 +24,7 @@ PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
 CompilerName           :=gcc
 C_CompilerName         :=gcc
-OutputFile             :=$(IntermediateDirectory)/$(ProjectName)
+OutputFile             :=$(ProjectName)
 Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
@@ -42,13 +37,20 @@ IncludePath            :=  "$(IncludeSwitch)/usr/include" "$(IncludeSwitch)/usr/
 RcIncludePath          :=
 Libs                   :=  /usr/lib/libcrypto.so
 LibPath                := "$(LibraryPathSwitch)/usr/lib" 
-
-
+PREFIX		       := usr
+DESTDIR		       :=
+BINDIR		       :=$(DESTDIR)/$(PREFIX)/bin
+DATA                   :=$(DESTDIR)/$(PREFIX)/share/aliwe
+OTHER		       := models \
+			  COPYING \
+			  README \
+			  AUTHORS \
+			  INSTALL
 ##
 ## User defined environment variables
 ##
 
-Objects=$(IntermediateDirectory)/aliwe$(ObjectSuffix) 
+Objects=aliwe$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -60,7 +62,7 @@ $(OutputFile): makeDirStep $(Objects)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) $(Objects) $(LibPath) $(Libs) $(LinkOptions)
 
 makeDirStep:
-	@test -d ./Release || $(MakeDirCommand) ./Release
+	@test -d . || $(MakeDirCommand) .
 
 PreBuild:
 
@@ -68,23 +70,26 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/aliwe$(ObjectSuffix): aliwe.c $(IntermediateDirectory)/aliwe$(DependSuffix)
-	$(C_CompilerName) $(SourceSwitch) "aliwe.c" $(C_CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/aliwe$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/aliwe$(DependSuffix): aliwe.c
-	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/aliwe$(ObjectSuffix) -MF$(IntermediateDirectory)/aliwe$(DependSuffix) -MM "aliwe.c"
+aliwe$(ObjectSuffix): aliwe.c aliwe$(DependSuffix)
+	$(C_CompilerName) $(SourceSwitch) "aliwe.c" $(C_CmpOptions) $(ObjectSwitch)aliwe$(ObjectSuffix) $(IncludePath)
+aliwe$(DependSuffix): aliwe.c
+	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) -MG -MP -MTaliwe$(ObjectSuffix) -MFaliwe$(DependSuffix) -MM "aliwe.c"
 
-$(IntermediateDirectory)/aliwe$(PreprocessSuffix): aliwe.c
-	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/aliwe$(PreprocessSuffix) "aliwe.c"
+aliwe$(PreprocessSuffix): aliwe.c
+	@$(C_CompilerName) $(C_CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) aliwe$(PreprocessSuffix) "aliwe.c"
 
 
--include $(IntermediateDirectory)/*$(DependSuffix)
+-include *$(DependSuffix)
 ##
 ## Clean
 ##
 clean:
-	$(RM) $(IntermediateDirectory)/aliwe$(ObjectSuffix)
-	$(RM) $(IntermediateDirectory)/aliwe$(DependSuffix)
-	$(RM) $(IntermediateDirectory)/aliwe$(PreprocessSuffix)
+	$(RM) aliwe$(ObjectSuffix)
+	$(RM) aliwe$(DependSuffix)
+	$(RM) aliwe$(PreprocessSuffix)
 	$(RM) $(OutputFile)
 
-
+install:
+	install -c -Dm777 $(OutputFile) $(BINDIR)/$(OutputFile)
+	mkdir -p $(DATA)
+	install -c -m777 $(OTHER)  $(DATA)
