@@ -153,7 +153,7 @@ int main(int argc, char* argv[])
 void print_usage(void)
 {
 	fprintf(stderr, "\nAliwe   ---  A wpa passphrase generator for AGPF Alice routers\n");
-	fprintf(stderr, "usage: wpagen [<opts>]\n");
+	fprintf(stderr, "usage: aliwe [<opts>]\n");
 	fprintf(stderr, "  <opts>  -h                       print this message\n");
 	fprintf(stderr, "          -r                       read from models file and print on console\n");
 	fprintf(stderr, "          -s  <SSID digits>        wpa passphrase generation based on SSID digits\n");
