@@ -1,20 +1,29 @@
-/* Program to generate WPA key for AGPF Alice Routers.
-	   Coded by Gianluca Boiano.
-	
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 3 of the License, or
-        (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-	
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, USA.  */
-
+/*
+ *  _______  __  __
+ * |   _   ||  ||__|.--.--.--..-----.
+ * |.  1   ||  ||  ||  |  |  ||  -__|
+ * |.  _   ||__||__||________||_____|
+ * |:  |   |
+ * |::.|:. |
+ * `--- ---'
+ *
+ *  Program to generate WPA key for AGPF Alice Routers.
+ *  Coded by Gianluca Boiano.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ * 	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation; either version 3 of the License, or
+ *      (at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *	Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,7 +101,7 @@ int main(int argc, char* argv[])
 	int i;
 	app_name = argv[0];
 	magic vect[MAX];
-	char mat[MAX][COL],cmpmac[CMPMACDIM];
+	char mat[MAX][COL];
 	int modelsnum, foundentries;
 	long int th;
 	char *endptr;
@@ -116,10 +125,14 @@ int main(int argc, char* argv[])
 							system("clear");
 							printf("%d entry in models file\n\n", modelsnum+1);
 							print_models(mat,modelsnum);
+							return 0;
 						}
 					else
+					{
 						printf("models file not found or unaccessible\n");
-
+						return -1;
+					  
+					}
 				}
 
 
@@ -136,18 +149,24 @@ int main(int argc, char* argv[])
 					if(modelsnum != 0)
 						{
 							printf("%d entry in <models> file\n\n", modelsnum+1);
-							/*print_models(mat,modelsnum); */
 							th = strtol(argv[i+1],&endptr,10);
 							foundentries=searchngen(vect,modelsnum,th);
 						}
 
 					if(foundentries == -1)
+					{
 						printf("No entry found in <models> file\nReasons:\n\t*Your alice router isn't an AGPF model\n\t*Your <models> file isn't updated\n");
+						return -1;
+					}
 					else
+					{
 						printf("\nFound %d entries\n", foundentries);
+						return 0;
+					}
 
 				}
 		}
+		return 0;
 }
 
 void print_usage(void)
@@ -292,7 +311,7 @@ int searchngen(magic vect[MAX], int riemp,long int th)
 					if(vect[i].threedigit == tmp)
 						{
 							buffer = (char*)calloc(13,sizeof(char));
-							sprintf(buffer,"%ldX%07d", vect[i].sn,(th-vect[i].q)/vect[i].k);
+							sprintf(buffer,"%dX%07ld", vect[i].sn,(th-vect[i].q)/vect[i].k);
 							printf("\n%s", buffer);
 
 							hashing(ALIS, buffer, vect[i].mac, th, cmpmac);
