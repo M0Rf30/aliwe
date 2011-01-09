@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 	char *endptr;
 	app_name = argv[0];
 
-	print_usage();
+
 
 	for (i=1; i<argc; i++)
 		{
@@ -167,12 +167,14 @@ int main(int argc, char* argv[])
 							return -1;
 						}
 					else
-						    printf("\nFound %d entries\n", foundentries);
-							return 0;
+						printf("\nFound %d entries\n", foundentries);
+					return 0;
 
 				}
+
 		}
-    return 0;
+	fprintf(stderr, "\n%s: missing argument\ttype -h for help\n", app_name);
+	return 0;
 }
 
 
@@ -299,11 +301,11 @@ int searchngen(magic vect[MAX], int riemp,long int th)
 {
 	int i,tmp,j=0;
 	char *buffer;
-    results datatoprint[NUMPAD];
+	results datatoprint[NUMPAD];
 
 	tmp = (int) th/100000;
 
-    for(i=0; i<riemp; i++)
+	for(i=0; i<riemp; i++)
 		{
 			if(vect[i].threedigit == tmp)
 				j++;
@@ -313,8 +315,8 @@ int searchngen(magic vect[MAX], int riemp,long int th)
 		return -1;
 	else
 		{
-			printf("\nSummary for Alice-%d:\n\n", th);
-			
+			printf("\nSummary for Alice-%ld:\n\n", th);
+
 			for(i=0; i<riemp; i++)
 				{
 					if(vect[i].threedigit == tmp)
@@ -325,8 +327,8 @@ int searchngen(magic vect[MAX], int riemp,long int th)
 							printf("\n%s\n\n",buffer);
 							printf("For this SN you can have these MACs\t\tand relative keys:\n");
 							ssid2mac(vect[i].mac,th,datatoprint);
-							hashing(ALIS,buffer,datatoprint);						    
-						    printtable(datatoprint,th,buffer);
+							hashing(ALIS,buffer,datatoprint);
+							printtable(datatoprint,th,buffer);
 
 
 
@@ -384,7 +386,7 @@ void ssid2mac(char *mac,long int th,results *datatoprint)
 			free(cmpmacbyte);
 			free(substrmac);
 			free(substrmac_normalized);
-		  /*free(completemac);*/
+			/*free(completemac);*/
 		}
 
 }
@@ -426,16 +428,16 @@ void hashing(unsigned char *alis, char *sn,results *datatoprint)
 void printtable(results *datatoprint,long int th,char *sn)
 {
 	int i,j;
-	for(i=0;i<NUMPAD;i++)
-	{
-		printf("\nwith pad %d:\t",i);
-		for(j=0;j<MACDIM;j++)
-			printf("%02X",datatoprint[i].macpad[j]);
+	for(i=0; i<NUMPAD; i++)
+		{
+			printf("\nwith pad %d:\t",i);
+			for(j=0; j<MACDIM; j++)
+				printf("%02X",datatoprint[i].macpad[j]);
 			printf("\t\t\t%s\n",datatoprint[i].wpa);
-			
-		
-	}
-	
+
+
+		}
+
 
 
 }
