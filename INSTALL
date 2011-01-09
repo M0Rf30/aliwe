@@ -1,9 +1,11 @@
  
 [How to Build]
-Type ./buildscript.sh
-and copy contents under <build> folder in your root
+Just type make
+
+[Run]
+type ./aliwe to get a little help
 
 [Requirements]
 gcc 
 make
-openssl library
+openssl
