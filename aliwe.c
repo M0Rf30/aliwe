@@ -24,6 +24,7 @@
  *  along with this program; if not, write to the Free Software
  *	Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,6 +43,8 @@
 #define CMPSN 13
 #define ALISDIM 32
 #define WPAKEYLEN 24
+#define NUMPAD 3
+#define SUBSTRDIM 7
 
 unsigned char ALIS[ALISDIM] =
 {
@@ -88,23 +91,32 @@ struct s_data
 };
 typedef struct s_data magic;
 
+struct s_results
+{
+	unsigned char macpad[MACDIM];
+	char wpa[WPAKEYLEN];
+};
+typedef struct s_results results;
+
 void print_usage(void);
 void print_models(char mat[][COL], int riemp);
 int read(char mat[][COL], magic vect[MAX]);
 int searchngen(magic vect[MAX], int riemp, long int th);
-void hashing(unsigned char *alis, char *sn, char *mac, int th,char *cmpmac);
-
+void ssid2mac(char *mac,long int th,results *datatoprint);
+void hashing(unsigned char *alis, char *sn,results *datatoprint);
+void printtable(results *datatoprint,long int th,char *sn);
 
 int main(int argc, char* argv[])
 {
 
 	int i;
-	app_name = argv[0];
+
 	magic vect[MAX];
 	char mat[MAX][COL];
-	int modelsnum, foundentries;
+	int modelsnum, foundentries=0;
 	long int th;
 	char *endptr;
+	app_name = argv[0];
 
 	print_usage();
 
@@ -125,14 +137,10 @@ int main(int argc, char* argv[])
 							system("clear");
 							printf("%d entry in models file\n\n", modelsnum+1);
 							print_models(mat,modelsnum);
-							return 0;
 						}
 					else
-					{
 						printf("models file not found or unaccessible\n");
-						return -1;
-					  
-					}
+
 				}
 
 
@@ -154,29 +162,30 @@ int main(int argc, char* argv[])
 						}
 
 					if(foundentries == -1)
-					{
-						printf("No entry found in <models> file\nReasons:\n\t*Your alice router isn't an AGPF model\n\t*Your <models> file isn't updated\n");
-						return -1;
-					}
+						{
+							printf("No entry found in <models> file\nReasons:\n\t*Your alice router isn't an AGPF model\n\t*Your <models> file isn't updated\n");
+							return -1;
+						}
 					else
-					{
-						printf("\nFound %d entries\n", foundentries);
-						return 0;
-					}
+						    printf("\nFound %d entries\n", foundentries);
+							return 0;
 
 				}
 		}
-		return 0;
+    return 0;
 }
+
+
+
 
 void print_usage(void)
 {
 	fprintf(stderr, "\nAliwe   ---  A wpa passphrase generator for AGPF Alice routers\n");
-	fprintf(stderr, "usage: aliwe [<opts>]\n");
+	fprintf(stderr, "usage: wpagen [<opts>]\n");
 	fprintf(stderr, "  <opts>  -h                       print this message\n");
 	fprintf(stderr, "          -r                       read from models file and print on console\n");
 	fprintf(stderr, "          -s  <SSID digits>        wpa passphrase generation based on SSID digits\n");
-	fprintf(stderr, "\n\nCoded by Gianluca Boiano  -  v0.1\n");
+	fprintf(stderr, "\n\nCoded by Gianluca Boiano  -  v0.2\n");
 }
 
 
@@ -276,6 +285,7 @@ int read(char mat[][COL], magic vect[MAX])
 	else return -1;
 
 }
+
 void print_models(char mat[][COL], int riemp)
 {
 	int i;
@@ -285,15 +295,15 @@ void print_models(char mat[][COL], int riemp)
 }
 
 
-
 int searchngen(magic vect[MAX], int riemp,long int th)
 {
-	int i,tmp,j=0,hex2index;
-	tmp = (int) th/100000;
+	int i,tmp,j=0;
 	char *buffer;
-	char cmpmac[CMPMACDIM];
+    results datatoprint[NUMPAD];
 
-	for(i=0; i<riemp; i++)
+	tmp = (int) th/100000;
+
+    for(i=0; i<riemp; i++)
 		{
 			if(vect[i].threedigit == tmp)
 				j++;
@@ -303,89 +313,129 @@ int searchngen(magic vect[MAX], int riemp,long int th)
 		return -1;
 	else
 		{
-
-			printf("Complete SN:\t\t\t\t");
-			printf("Here is the WPA passphrase:");
+			printf("\nSummary for Alice-%d:\n\n", th);
+			
 			for(i=0; i<riemp; i++)
 				{
 					if(vect[i].threedigit == tmp)
 						{
 							buffer = (char*)calloc(13,sizeof(char));
 							sprintf(buffer,"%dX%07ld", vect[i].sn,(th-vect[i].q)/vect[i].k);
-							printf("\n%s", buffer);
+							printf("\nSerial Number:");
+							printf("\n%s\n\n",buffer);
+							printf("For this SN you can have these MACs\t\tand relative keys:\n");
+							ssid2mac(vect[i].mac,th,datatoprint);
+							hashing(ALIS,buffer,datatoprint);						    
+						    printtable(datatoprint,th,buffer);
 
-							hashing(ALIS, buffer, vect[i].mac, th, cmpmac);
+
 
 						}
 
 				}
-			printf("\n\n\tComplete Ethernet MAC:");
-			printf("\n\t%s",cmpmac);
 		}
 
 	return j;
 
 }
 
+void ssid2mac(char *mac,long int th,results *datatoprint)
+{
+	int z,i,j,thcycle;
+	int byte;
+	char *completemac; /*mac completo ma ancora in stringa*/
+	char *substrmac; /*2a parte del mac temporaneo generato dal ssid da normalizzare*/
+	char *substrmac_normalized;/*2a parte del mac temporaneo generato dal ssid da normalizzare pad1*/
+	unsigned char *cmpmacbyte;/*mac convertito in byte*/
 
+
+	for(z=0; z<NUMPAD; z++)
+		{
+			cmpmacbyte = (unsigned char*)calloc(MACDIM,sizeof(unsigned char));
+			substrmac=(char*)calloc(SUBSTRDIM,sizeof(char));
+			substrmac_normalized=(char*)calloc(SUBSTRDIM,sizeof(char));
+			completemac=(char*)calloc(CMPMACDIM,sizeof(char));
+			thcycle= th+(100000000*z);
+			sprintf(substrmac,"%2X", thcycle); /*conversione da ssid a mac con */
+			j=0;
+			for(i=1; i<SUBSTRDIM; i++)
+				{
+					substrmac_normalized[j]=substrmac[i];
+					j++;
+				}
+			strcpy(completemac,mac);
+			strcat(completemac,substrmac_normalized);
+
+
+
+			j=0;
+			for(i=0; i<CMPMACDIM; i++)
+				{
+					/*converto ogni 2 lettere della stringa completemac in un intero
+					 * per poi convertire l'intero in esadecimale e farlo corrispondere ad 1 byte*/
+					sscanf(&completemac[i], "%02x", &byte);
+					cmpmacbyte[j] = (unsigned char)byte;
+					j++;
+					i++;
+				}
+
+			memcpy(datatoprint[z].macpad,cmpmacbyte,MACDIM*sizeof(unsigned char));
+
+			free(cmpmacbyte);
+			free(substrmac);
+			free(substrmac_normalized);
+		  /*free(completemac);*/
+		}
+
+}
 
 
 /*questa è la funzione di grande interesse:th è il ssid passato a riga di comando, mac va converitito
  * in sequenza di byte e alis e sn così come sono*/
-void hashing(unsigned char *alis, char *sn, char *mac, int th,char *cmpmac)
+void hashing(unsigned char *alis, char *sn,results *datatoprint)
 {
 
 
 	unsigned char hash[SHA256_DIGEST_LENGTH];
 	SHA256_CTX sha256;
 
-
-	unsigned char macbyte;
-	int i,j=0,byte,hex2index;
-	char completemac[CMPMACDIM]; /*mac completo ma ancora in stringa*/
-	char mac0[7]; /*2a parte del mac temporaneo generato dal ssid da normalizzare*/
-	char mac1[MACDIM]; /*2a parte del mac temporaneo normalizzato a*/
-	unsigned char cmpmacbyte[MACDIM];
-	char wpakey[24];
-
-	sprintf(mac0,"%2X", th);
-
-	for(i=1; i<=strlen(mac0); i++)
+	int i,j,hex2index;
+	char *wpakey;
+	for(i=0; i<NUMPAD; i++)
 		{
-			mac1[j]=mac0[i];
-			j++;
-		}
-	strcpy(completemac,mac);
-	strcat(completemac,mac1);
-	strcpy(cmpmac,completemac);
+			SHA256_Init(&sha256);
+			SHA256_Update(&sha256, alis, ALISDIM);
+			SHA256_Update(&sha256, sn, CMPSN);
+			SHA256_Update(&sha256, datatoprint[i].macpad, MACDIM);
+			SHA256_Final(hash, &sha256);
+			wpakey=(char*)calloc(WPAKEYLEN,sizeof(char));
 
-	j=0;
-	for(i=0; i<CMPMACDIM; i++)
-		{
-			sscanf(&completemac[i], "%02x", &byte);
-			cmpmacbyte[j] = (unsigned char)byte;
-			j++;
-			i++;
+			for(j=0; j<WPAKEYLEN; j++)
+				{
+					hex2index=(int) hash[j];
+					wpakey[j]=preinitcharset[hex2index];
+
+				}
+
+			strcpy(datatoprint[i].wpa,wpakey);
+			free(wpakey);
 
 		}
+}
 
-
-
-	SHA256_Init(&sha256);
-	SHA256_Update(&sha256, alis, ALISDIM);
-	SHA256_Update(&sha256, sn, CMPSN);
-	SHA256_Update(&sha256, cmpmacbyte, MACDIM);
-	SHA256_Final(hash, &sha256);
-
-	for(i=0; i<WPAKEYLEN; i++)
-		{
-			hex2index=(int) hash[i];
-			wpakey[i]=preinitcharset[hex2index];
-
-		}
-
-
-	printf("\t\t\t\t%s", wpakey);
+void printtable(results *datatoprint,long int th,char *sn)
+{
+	int i,j;
+	for(i=0;i<NUMPAD;i++)
+	{
+		printf("\nwith pad %d:\t",i);
+		for(j=0;j<MACDIM;j++)
+			printf("%02X",datatoprint[i].macpad[j]);
+			printf("\t\t\t%s\n",datatoprint[i].wpa);
+			
+		
+	}
+	
 
 
 }
