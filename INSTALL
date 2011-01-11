@@ -9,3 +9,6 @@ type ./aliwe to get a little help
 gcc 
 make
 openssl
+
+To compile aliwe on Microsoft OS you can download openssl library here:
+http://www.slproweb.com/products/Win32OpenSSL.html
