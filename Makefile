@@ -41,7 +41,7 @@ PREFIX		       := usr
 DESTDIR		       :=
 BINDIR		       :=$(DESTDIR)/$(PREFIX)/bin
 DATA                   :=$(DESTDIR)/$(PREFIX)/share/aliwe
-OTHER		       := models \
+OTHER		       := config.txt \
 			  COPYING \
 			  README \
 			  AUTHORS \

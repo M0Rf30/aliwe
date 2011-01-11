@@ -135,11 +135,11 @@ int main(int argc, char* argv[])
 					if(modelsnum != -1)
 						{
 							system("clear");
-							printf("%d entry in models file\n\n", modelsnum+1);
+							printf("%d entry in <config> file\n\n", modelsnum+1);
 							print_models(mat,modelsnum);
 						}
 					else
-						printf("models file not found or unaccessible\n");
+						printf("<config> file not found or unaccessible\n");
 
 				}
 
@@ -156,14 +156,14 @@ int main(int argc, char* argv[])
 					modelsnum=read(mat,vect);
 					if(modelsnum != 0)
 						{
-							printf("%d entry in <models> file\n\n", modelsnum+1);
+							printf("%d entry in <config> file\n\n", modelsnum+1);
 							th = strtol(argv[i+1],&endptr,10);
 							foundentries=searchngen(vect,modelsnum,th);
 						}
 
 					if(foundentries == -1)
 						{
-							printf("No entry found in <models> file\nReasons:\n\t*Your alice router isn't an AGPF model\n\t*Your <models> file isn't updated\n");
+							printf("No entry found in <config> file\nReasons:\n\t*Your alice router isn't an AGPF model\n\t*Your <config> file isn't updated\n");
 							return -1;
 						}
 					else
@@ -185,7 +185,7 @@ void print_usage(void)
 	fprintf(stderr, "\nAliwe   ---  A wpa passphrase generator for AGPF Alice routers\n");
 	fprintf(stderr, "usage: wpagen [<opts>]\n");
 	fprintf(stderr, "  <opts>  -h                       print this message\n");
-	fprintf(stderr, "          -r                       read from models file and print on console\n");
+	fprintf(stderr, "          -r                       read from <config> file and print on console\n");
 	fprintf(stderr, "          -s  <SSID digits>        wpa passphrase generation based on SSID digits\n");
 	fprintf(stderr, "\n\nCoded by Gianluca Boiano  -  v0.2\n");
 }
@@ -197,7 +197,7 @@ int read(char mat[][COL], magic vect[MAX])
 	char *temp;
 	char *endptr;
 	FILE *fp;
-	fp=fopen("/usr/share/aliwe/models", "r");
+	fp=fopen("/usr/share/aliwe/config.txt", "r");
 	if(fp !=NULL)
 		{
 			while(!feof(fp) && i<MAX)
