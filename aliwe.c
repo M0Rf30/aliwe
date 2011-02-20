@@ -137,6 +137,7 @@ int main(int argc, char* argv[])
                 system("clear");
                 printf("%d entry in <config> file\n\n", modelsnum+1);
                 print_models(mat,modelsnum);
+                exit(0);
             }
             else
                 printf("<config> file not found or unaccessible\n");
