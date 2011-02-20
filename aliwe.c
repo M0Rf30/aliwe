@@ -187,7 +187,7 @@ void print_usage(void)
     fprintf(stderr, "  <opts>  -h                       print this message\n");
     fprintf(stderr, "          -r                       read from <config> file and print on console\n");
     fprintf(stderr, "          -s  <SSID digits>        wpa passphrase generation based on SSID digits\n");
-    fprintf(stderr, "\n\nCoded by Gianluca Boiano  -  v0.2\n");
+    fprintf(stderr, "\n\nCoded by Gianluca Boiano  -  v0.2.1\n");
 }
 
 
