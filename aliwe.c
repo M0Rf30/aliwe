@@ -348,7 +348,7 @@ void ssid2mac(char mac[MACDIM],long int th,results datatoprint[NUMPAD])
     int z,a,i,j,thcycle;
     int byte;
     char completemac[CMPMACDIM]; /*mac completo ma ancora in stringa*/
-    char substrmac[SUBSTRDIM+1]; /*2a parte del mac temporaneo generato dal ssid da normalizzare*/
+    char substrmac[SUBSTRDIM+2]; /*2a parte del mac temporaneo generato dal ssid da normalizzare*/
     char substrmac_normalized[SUBSTRDIM];/*2a parte del mac temporaneo generato dal ssid da normalizzare*/
     unsigned char cmpmacbyte[MACDIM];/*mac convertito in byte*/
 
