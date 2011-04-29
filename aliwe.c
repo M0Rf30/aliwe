@@ -164,8 +164,7 @@ int main(int argc, char* argv[])
 
             if(foundentries == -1)
             {
-                printf("No entry found in <config> file\nReasons:\n\t*Your alice router isn't an AGPF model\n\t*Your <config> file isn't updated\n\t*Did you 
-write digits only?\n");
+                printf("No entry found in <config> file\nReasons:\n\t*Your alice router isn't an AGPF model\n\t*Your <config> file isn't updated\n\t*Did you write digits only?\n");
                 return -1;
             }
             else
