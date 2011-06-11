@@ -1,9 +1,9 @@
  
 [How to Build]
-Just type make
+Just type make && make DESTDIR=/ install
 
 [Run]
-type ./aliwe to get a little help
+type 'aliwe -h' to get a little help
 
 [Requirements]
 gcc 
