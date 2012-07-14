@@ -34,6 +34,7 @@
 
 #define MAX 400
 #define COL 32
+#define SSIDDIM 8
 #define THDIM 3
 #define SNDIM 5
 #define KDIM 2
@@ -148,9 +149,14 @@ int main(int argc, char* argv[])
         else if (!strcmp(argv[i], "-s"))
         {
 
-            if (i+1 >= argc )
+            if (i+1 >= argc)
             {
                 fprintf(stderr, "%s: missing argument\n", app_name);
+                return -1;
+            }
+            if (strlen(argv[i+1]) != SSIDDIM)
+            {
+                fprintf(stderr, "%s: Please type 8 SSID digits\n", app_name);
                 return -1;
             }
             system("clear");
