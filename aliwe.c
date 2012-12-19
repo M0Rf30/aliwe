@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
                 return -1;
             }
             else
-                printf("\nFound %d entries\n", foundentries);
+                printf("\n%d entries found\n", foundentries);
             return 0;
 
         }
@@ -354,16 +354,16 @@ void ssid2mac(char mac[MACDIM],long int th,results datatoprint[NUMPAD])
 {
     int z,a,i,j,thcycle;
     int byte;
-    char completemac[CMPMACDIM]; /*mac completo ma ancora in stringa*/
-    char substrmac[SUBSTRDIM+2]; /*2a parte del mac temporaneo generato dal ssid da normalizzare*/
-    char substrmac_normalized[SUBSTRDIM];/*2a parte del mac temporaneo generato dal ssid da normalizzare*/
-    unsigned char cmpmacbyte[MACDIM];/*mac convertito in byte*/
+    char completemac[CMPMACDIM];    /*mac completo ma ancora in stringa*/
+    char substrmac[SUBSTRDIM+2];    /*2a parte del mac temporaneo generato dal ssid da normalizzare*/
+    char substrmac_normalized[SUBSTRDIM];   /*2a parte del mac temporaneo generato dal ssid da normalizzare*/
+    unsigned char cmpmacbyte[MACDIM];   /*mac convertito in byte*/
 
 
     for(z=0; z<NUMPAD; z++)
     {
         thcycle= th+(100000000*z);
-        sprintf(substrmac,"%2X", thcycle); /*conversione da ssid a seconda parte mac non normalizzata e in stringa */
+        sprintf(substrmac,"%2X", thcycle);  /*conversione da ssid a seconda parte mac non normalizzata e in stringa */
 
         j=0;
         for(i=1; i<SUBSTRDIM; i++)
@@ -390,7 +390,7 @@ void ssid2mac(char mac[MACDIM],long int th,results datatoprint[NUMPAD])
 }
 
 
-/*questa è la funzione di grande interesse:th è il ssid passato a riga di comando, mac va converitito
+/* Funzione per generare l'hash: th è il ssid passato a riga di comando. mac va converitito
  * in sequenza di byte e alis e sn così come sono*/
 void hashing(unsigned char alis[ALISDIM], char sn[CMPSN],unsigned char macpad[MACDIM],char wpa[WPAKEYLEN])
 {
