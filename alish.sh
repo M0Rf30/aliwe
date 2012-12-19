@@ -1,6 +1,8 @@
 #!/bin/bash
 VERSION='0.01';
-FILE='/usr/share/aliwe/config.txt';
+FILE="";
+FILEPATH1='/usr/share/aliwe/config.txt';
+FILEPATH2='/mnt/sdcard/config.txt';
 OPENSSL=$(which sha256sum);
 SNDARGLENGHT=8;
 SNDARG=$2;
@@ -11,8 +13,8 @@ QDIM=8;
 MACDIM=6;
 NUMPAD=3;
 WPALEN=24;
-ALIS="\x64\xC6\xDD\xE3\xE5\x79\xB6\xD9\x86\x96\x8D\x34\x45\xD2\x3B\x15\xCA\xAF\x12\x84\x02\xAC\x56\x00\x05\xCE\x20\x75\x91\x3F\xDC\xE8"
-preinitcharset=("0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123");
+ALIS="\x64\xC6\xDD\xE3\xE5\x79\xB6\xD9\x86\x96\x8D\x34\x45\xD2\x3B\x15\xCA\xAF\x12\x84\x02\xAC\x56\x00\x05\xCE\x20\x75\x91\x3F\xDC\xE8";
+preinitcharset="0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123";
 
 version () {  
 	printf 'Coded by Gianluca Boiano  -  v%s\n' "${VERSION}";
@@ -102,23 +104,23 @@ ssid () {
 	fi
 	if [ -f $FILE ]; then
 		if [ -z $SNDARG ]; then # test -z  checks for an empty string
-			printf 'Missing parameter';
+			printf 'Missing parameter\n';
 			exit 1;
 		elif [ ! ${#SNDARG} -eq $SNDARGLENGHT ]; then # ${#} returns the string lenght
-		printf 'Please type 8 digits';
-		exit 1;
-	fi
-	searchvar=`echo $SNDARG | cut -c 1-3`; 
-	count=`grep \"$searchvar $FILE | wc -l`; # wc -l to obtain search occurrencies
-	if [ $count -eq 0 ]; then 
-		printf 'No entry found in config file';
-	else
-		printf '%d entries found' "$count";
-		printf "\nSummary for Alice-%s:" $SNDARG;
-		generation;
-	fi
-	else
-		printf 'File not found';
+			printf 'Please type 8 digits\n';
+			exit 1;
+		fi
+		searchvar=`echo $SNDARG | cut -c 1-3`; 
+		count=`grep \"$searchvar $FILE | wc -l`; # wc -l to obtain search occurrencies
+		if [ $count -eq 0 ]; then 
+			printf 'No entry found in config file';
+		else
+			printf '%d entries found\n' "$count";
+			printf "Summary for Alice-%s:" $SNDARG;
+			generation;
+		fi
+		else
+			printf 'File not found\n';
 	fi
 }
 
@@ -136,5 +138,11 @@ process_args () {
 }
 
 ## Get arguments passed to the script. ##
+
+if [ -f $FILEPATH1 ]; then
+	FILE=$FILEPATH1;
+else
+	FILE=$FILEPATH2;
+fi
 
 process_args $@;
