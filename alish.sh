@@ -25,6 +25,7 @@ help () {
 	printf '  <opts>  -h                       print this message\n';
 	printf '          -r                       read from <config> file and print on console\n';
 	printf '          -s  <SSID digits>        wpa passphrase generation based on SSID digits\n';
+	printf '          -v                       display version information\n';
 	exit 0;
 }
 
@@ -125,9 +126,9 @@ ssid () {
 process_args () {
 # Process other arguments.
 	case "$1" in
+		-h	  ) help;;
 		-r        ) read;;
 		-s	  ) ssid;;
-		-h	  ) help;;
 		-v	  ) version;;
 		-*	  ) help;;
 		*	  ) echo 'Please type -h for details';;
