@@ -91,5 +91,7 @@ clean:
 
 install:
 	install -c -Dm777 $(OutputFile) $(BINDIR)/$(OutputFile)
+	install -c -Dm777 alish.sh $(BINDIR)/alish.sh
+	chmod +x $(BINDIR)/alish.sh
 	mkdir -p $(DATA)
 	install -c -m777 $(OTHER)  $(DATA)
