@@ -113,7 +113,7 @@ ssid () {
 		searchvar=`echo $SNDARG | cut -c 1-3`; 
 		count=`grep \"$searchvar $FILE | wc -l`; # wc -l to obtain search occurrencies
 		if [ $count -eq 0 ]; then 
-			printf 'No entry found in config file';
+			printf 'No entry found in config file\n';
 		else
 			printf '%d entries found\n' "$count";
 			printf "Summary for Alice-%s:" $SNDARG;
