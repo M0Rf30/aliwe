@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
         }
 
     }
-    fprintf(stderr, "\n%s: missing argument\ttype -h for help\n", app_name);
+    fprintf(stderr, "%s: missing argument\ttype -h for help\n", app_name);
     return 0;
 }
 
