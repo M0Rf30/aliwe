@@ -390,7 +390,7 @@ void ssid2mac(char mac[MACDIM],long int th,results datatoprint[NUMPAD])
 }
 
 
-/* Funzione per generare l'hash: th è il ssid passato a riga di comando. mac va converitito
+/* Funzione per generare l'hash: th è il ssid passato a riga di comando. mac va convertito
  * in sequenza di byte e alis e sn così come sono*/
 void hashing(unsigned char alis[ALISDIM], char sn[CMPSN],unsigned char macpad[MACDIM],char wpa[WPAKEYLEN])
 {
