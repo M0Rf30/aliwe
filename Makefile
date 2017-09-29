@@ -43,7 +43,7 @@ BINDIR		       :=$(DESTDIR)/$(PREFIX)/bin
 DATA                   :=$(DESTDIR)/$(PREFIX)/share/aliwe
 OTHER		       := config.txt \
 			  COPYING \
-			  README \
+			  README.md \
 			  AUTHORS \
 			  INSTALL
 ##
