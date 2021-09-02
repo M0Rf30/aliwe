@@ -1,3 +1,5 @@
+# Readme
+
      _______  __  __                  
     |   _   ||  ||__|.--.--.--..-----.
     |.  1   ||  ||  ||  |  |  ||  -__|
@@ -5,7 +7,6 @@
     |:  |   |                         
     |::.|:. |                         
     `--- ---'                         
-                                   
 
 A WPA passphrase generator for AGPF Alice Routers
 coded by Gianluca Boiano and released under GPL3 terms of license
